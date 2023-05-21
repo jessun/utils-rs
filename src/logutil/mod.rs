@@ -2,7 +2,7 @@ use std::io::Write;
 
 const LOG_TIME_FORMAT: &str = "%Y-%m-%dT%H:%M:%S";
 
-pub fn default_ini() {
+pub fn default_init() {
     init(|_| {})
 }
 
