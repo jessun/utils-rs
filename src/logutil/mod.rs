@@ -16,7 +16,7 @@ pub fn init<F>(f: F)
 where
     F: Fn(&mut env_logger::Builder),
 {
-    let mut log_builder = env_logger::builder();
+    let mut log_builder = env_logger::Builder::from_default_env();
     format(&mut log_builder);
     f(&mut log_builder);
     log_builder.init();
@@ -28,7 +28,7 @@ fn format(log_builder: &mut env_logger::Builder) {
             buf,
             "[{}][{}] {} [{}:{}]",
             chrono::Local::now().format(LOG_TIME_FORMAT),
-            record.level(),
+            buf.default_styled_level(record.level()),
             record.args(),
             record.file().unwrap_or("unknown"),
             record.line().unwrap_or(0),
@@ -38,11 +38,11 @@ fn format(log_builder: &mut env_logger::Builder) {
 
 #[cfg(test)]
 mod logutil_tests {
-    use crate::logutil::init_in_test;
+    use crate::logutil;
 
     #[test]
     fn test_log() {
-        init_in_test();
+        logutil::default_init();
         log::error!("error message");
         log::warn!("warn message");
         log::info!("info message");
